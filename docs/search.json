@@ -18,7 +18,7 @@
     "href": "index.html",
     "title": "Shawn’s website",
     "section": "",
-    "text": "1 + 1\n\n[1] 2"
+    "text": "Heyyy, my name is Shawn and welcome to my website! I’m in year 3 of engineering and you can find all my final projects of NM2207 here!\n\ndataset &lt;- read.csv(\"/Users/shawnji/Documents/GitHub/shawnji3.github.io/Billboard_Hot100_Songs_Spotify_1946-2022.csv\")"
   },
   {
     "objectID": "courses.html",
