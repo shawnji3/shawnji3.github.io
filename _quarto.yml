@@ -9,6 +9,10 @@ website:
       - href: index.qmd
         text: Home
       - about.qmd
+      - href: Description.qmd
+        text: Description
+      - href: courses.qmd
+        text: Courses
 
 format:
   html:
