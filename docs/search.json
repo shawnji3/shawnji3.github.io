@@ -26,5 +26,12 @@
     "title": "Courses",
     "section": "",
     "text": "Courses\nThese are the courses I’ve been taking so far!"
+  },
+  {
+    "objectID": "Week-8Diary.html",
+    "href": "Week-8Diary.html",
+    "title": "Week 8: Final Project Diary",
+    "section": "",
+    "text": "I. Topics\nThe focus of the final project is to investigate how the preferences for popular songs have evolved throughout the 21st century. The goal is to determine the most popular streamed genres from 2000 to 2022, covering the past 20 years, with a specific emphasis on the years 2020 to 2022.\n\n\nII. Data Source\nThe dataset has been curated to include the top 50 ranking songs on the Billboard charts from 2000 to 2022. The analysis will specifically examine the trends in different music genres over this 22-year period."
   }
 ]
