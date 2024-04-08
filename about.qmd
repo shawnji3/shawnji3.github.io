@@ -4,8 +4,53 @@ title: "About"
 
 Welcome to the website
 
-```{r}
-1 + 1
+```{r,eval=TRUE,echo=TRUE}
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+
+songs_data <- read.csv("/Users/shawnji/Documents/billboard.csv")
+songs_data
+# Define the dataset
+# Assuming your dataset is named 'songs_data'
+# Make sure the 'Year' column is in numeric format
+songs_data$Year <- as.numeric(songs_data$Year)
+
+# Filter the dataset for the specified years (2000-2001)
+filtered_data <- songs_data %>%
+  filter(Year >= 2000 & Year <= 2023)
+
+# Define the genres of interest
+genres_of_interest <- c('r&b', 'pop', 'hip pop', 'salsa', 'soul', 'rock', 'country', 'neo')
+
+# Initialize an empty data frame to store genre counts
+genre_counts <- data.frame(Year = numeric(), Genre = character())
+
+# Loop through each genre and calculate the count for each year
+for(genre in genres_of_interest) {
+  genre_data <- filtered_data %>%
+    filter(grepl(genre, Genres, ignore.case = TRUE)) %>%
+    group_by(Year) %>%
+    summarise(Count = n())
+  genre_counts <- bind_rows(genre_counts, genre_data)
+}
+
+# Plot the trend lines
+ggplot(genre_counts, aes(x = Year, y = Count, color = Genre)) +
+  geom_line() +
+  labs(title = "Genre Trends Over Years",
+       x = "Year",
+       y = "Number of Songs") +
+  scale_color_manual(values = c('r&b' = 'blue', 'pop' = 'red', 'hip pop' = 'green', 
+                                'salsa' = 'orange', 'soul' = 'purple', 'rock' = 'brown',
+                                'country' = 'pink', 'neo' = 'cyan')) +
+  theme_minimal()
 ```
 
 # Data Visualization
+
+
+```{r,eval=TRUE,echo=TRUE}
+
+```

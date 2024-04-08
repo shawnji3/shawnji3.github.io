@@ -1,20 +1,55 @@
 library(shiny)
 
 # Define UI for application that draws a histogram
+library(shiny)
+library(dplyr)
+library(ggplot2)
+
+# Define UI
 ui <- fluidPage(
+  titlePanel("Genre Counts by Year"),
   sidebarLayout(
-    sidebarPanel(sliderInput("samplesize","Sample Size:",min = 100,max = 10000,value = 1000)),
-    mainPanel(plotOutput("distPlot"))
+    sidebarPanel(
+      sliderInput("year", "Select Year:",
+                  min = 2000, max = 2023, value = 2000, step = 1)
+    ),
+    mainPanel(
+      plotOutput("genre_plot")
+    )
   )
 )
 
-# Define server logic required to draw a histogram
+# Define server logic
 server <- function(input, output) {
-  output$distPlot <- renderPlot({
-    hist(rnorm(input$samplesize),col='darkorchid',xlab="Sample",main="Standard Normally Distributed Sample")},
-    height=300
-  )
+  
+  # Read the dataset
+  songs_data <- read.csv("/Users/shawnji/Documents/billboard.csv")
+  
+  # Define genres of interest
+  genres_of_interest <- c('r&b', 'pop', 'hip pop', 'salsa', 'soul', 'rock', 'country', 'neo')
+  
+  # Calculate genre counts based on selected year
+  filtered_data <- reactive({
+    songs_data %>%
+      filter(Year == input$year)
+  })
+  
+  genre_counts <- reactive({
+    filtered_data() %>%
+      summarise_at(vars(matches("Genres")), function(x) sum(grepl(genres_of_interest, x, ignore.case = TRUE)))
+  })
+  
+  # Create bar plot
+  output$genre_plot <- renderPlot({
+    ggplot(genre_counts(), aes(x = names(genre_counts()), y = genre_counts())) +
+      geom_bar(stat = "identity", fill = "blue") +
+      labs(title = "Genre Counts by Year",
+           x = "Genre",
+           y = "Count") +
+      theme_minimal() +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  })
 }
 
 # Run the application
-shinyApp(ui = ui, server = server) 
+shinyApp(ui = ui, server = server)
