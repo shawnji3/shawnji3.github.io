@@ -3,7 +3,7 @@ library(ggplot2)
 library(dplyr)
 
 # Read the dataset
-music_data <- read.csv("/Users/shawnji/Documents/billboard_used.csv")  # Replace "your_dataset.csv" with the actual file path
+music_data <- read.csv("billboard_used.csv")  # Replace "your_dataset.csv" with the actual file path
 
 # List of genres
 genres <- c('r&b', 'pop', 'hip pop', 'salsa', 'soul', 'rock', 'country', 'neo')
