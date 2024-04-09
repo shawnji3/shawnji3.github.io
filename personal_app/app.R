@@ -1,5 +1,3 @@
-library(shiny)
-
 # Define UI for application that draws a histogram
 library(shiny)
 library(dplyr)
@@ -11,7 +9,7 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       sliderInput("year", "Select Year:",
-                  min = 2000, max = 2023, value = 2000, step = 1)
+                  min = 2000, max = 2022, value = 2000, step = 1)
     ),
     mainPanel(
       plotOutput("genre_plot")
@@ -23,7 +21,7 @@ ui <- fluidPage(
 server <- function(input, output) {
   
   # Read the dataset
-  songs_data <- read.csv("/Users/shawnji/Documents/billboard.csv")
+  songs_data <- read.csv("/Users/shawnji/Documents/billboard_used.csv")
   
   # Define genres of interest
   genres_of_interest <- c('r&b', 'pop', 'hip pop', 'salsa', 'soul', 'rock', 'country', 'neo')
