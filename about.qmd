@@ -4,8 +4,6 @@ title: "About"
 
 Data story
 
-
-
 ```{r,eval=TRUE,echo=TRUE}
 # Load necessary libraries
 library(ggplot2)
@@ -51,7 +49,6 @@ ggplot(genre_counts, aes(x = Year, y = Count, color = Genre)) +
 ```
 
 # Data Visualization
-
 
 ```{r,eval=TRUE,echo=TRUE}
 
