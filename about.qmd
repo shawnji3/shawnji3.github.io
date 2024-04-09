@@ -10,116 +10,123 @@ Understanding the evolution of public taste in musics gives us insights into bro
 
 There are 3 data visualizations in the following paragraphs, which include a **trend line**, a **pie chart** and an **interactive bar chart**.
 
-## Trend lines of each genre from 2000 - 2023
+## Trend lines of each genre from 2000 - 2022
 
-```{r,eval=FALSE,echo=TRUE}
-# Load necessary libraries
+The first data visualization is a trend line where it shows the trend of the popularity of a specific genre through 2000-2022. There are 6 genres in total, 'r&b', 'pop', 'hip pop', 'soul', 'rock', 'country''. There are different colors labeled for different genres
+
+
+```{r, eval=TRUE, echo=TRUE}
+# Load required libraries
 library(ggplot2)
 library(dplyr)
-library(tidyverse)
 
-songs_data <- read.csv("/Users/shawnji/Documents/billboard_used.csv")
-songs_data
-# Define the dataset
-# Assuming your dataset is named 'songs_data'
-# Make sure the 'Year' column is in numeric format
-songs_data$Year <- as.numeric(songs_data$Year)
+# Read the dataset
+music_data <- read.csv("/Users/shawnji/Documents/billboard_used.csv")  # Replace "your_dataset.csv" with the actual file path
 
-# Filter the dataset for the specified years (2000-2001)
-filtered_data <- songs_data %>%
-  filter(Year >= 2000 & Year <= 2023)
+# List of genres
+genres <- c('r&b', 'pop', 'hip pop', 'soul', 'rock', 'country')
 
-# Define the genres of interest
-genres_of_interest <- c('r&b', 'pop', 'hip pop', 'salsa', 'soul', 'rock', 'country', 'neo')
-
-# Initialize an empty data frame to store genre counts
-genre_counts <- data.frame(Year = numeric(), Genres = character())
-
-# Loop through each genre and calculate the count for each year
-for(genre in genres_of_interest) {
-  genre_data <- filtered_data %>%
-    filter(grepl(genre, Genres, ignore.case = TRUE)) %>%
-    group_by(Year) %>%
-    summarise(Count = n())
-  genre_counts <- bind_rows(genre_counts, genre_data)
+# Function to replace genre with matching genre from the list
+replace_genre <- function(genre_str, genre_list) {
+  for (genre in genre_list) {
+    if (genre %in% unlist(strsplit(gsub("\\[|\\]|'", "", genre_str), ", "))) {
+      return(genre)
+    }
+  }
+  return(NA)
 }
 
-# Plot the trend lines
-ggplot(genre_counts, aes(x = Year, y = Count, color = Genres)) +
-  geom_line() +
-  labs(title = "Genre Trends Over Years",
+# Modify 'Genres' column to have only the matching genre
+music_data$Genres <- sapply(music_data$Genres, replace_genre, genre_list = genres)
+
+# Remove rows with NA in 'Genres' column
+music_data <- music_data[complete.cases(music_data$Genres), ]
+
+# Reshape the data into long format
+music_data_long <- reshape2::melt(music_data, id.vars = c("Year", "Genres"))
+
+# Plot
+ggplot(music_data_long, aes(x = Year, color = Genres)) +
+  geom_point(stat = "count") +
+  labs(title = "Genre Trends Over Time",
        x = "Year",
-       y = "Number of Songs") +
-  scale_color_manual(values = c('r&b' = 'blue', 'pop' = 'red', 'hip pop' = 'green', 
-                                'salsa' = 'orange', 'soul' = 'purple', 'rock' = 'brown',
-                                'country' = 'pink', 'neo' = 'cyan')) +
+       y = "Number of Songs",
+       color = "Genre") +
+  scale_color_manual(values = c("r&b" = "#FFB6C1", "pop" = "#87CEEB", "hip pop" = "#FFD700",
+                                 "soul" = "#FF4500", "rock" = "#9400D3",
+                                "country" = "#FF1493")) +
   theme_minimal()
 ```
 
-# Data Visualization
-
 ```{r,eval=TRUE,echo=TRUE}
-# Load necessary libraries
-library(dplyr)
+# Function to replace genre with matching genre from the list
+# Load required libraries
 library(ggplot2)
+library(dplyr)
 
-# Load the dataset
-data <- read.csv("/Users/shawnji/Documents/billboard_used.csv", stringsAsFactors = FALSE)
+# Read the dataset
+music_data <- read.csv("/Users/shawnji/Documents/billboard_used.csv")  # Replace "your_dataset.csv" with the actual file path
 
-# Function to extract genres from bracket notation
-extract_genres <- function(genre_string) {
-  gsub("[\\[\\]']", "", genre_string) %>% 
-    strsplit(", ") %>% 
-    unlist()
+# List of genres
+genres <- c('r&b', 'pop', 'hip pop', 'soul', 'rock', 'country')
+
+replace_genre <- function(genre_str, genre_list) {
+  for (genre in genre_list) {
+    if (genre %in% unlist(strsplit(gsub("\\[|\\]|'", "", genre_str), ", "))) {
+      return(genre)
+    }
+  }
+  return(NA)
 }
 
-# Apply the function to the dataset
-data$Genres <- lapply(data$Genres, extract_genres)
+# Modify 'Genres' column to have only the matching genre
+music_data$Genres <- sapply(music_data$Genres, replace_genre, genre_list = genres)
+
+# Remove rows with NA in 'Genres' column
+music_data <- music_data[complete.cases(music_data$Genres), ]
 
 # Filter data for the year 2000
-data_2000 <- data %>%
-  filter(Year == 2000)
+music_data_2000 <- filter(music_data, Year == 2000)
 
-# Count the occurrences of specified genres in 2000
-genre_counts_2000 <- table(unlist(data_2000$Genres))
-
-# Specify the 8 genres
-specified_genres <- c('r&b', 'pop', 'hip pop', 'salsa', 'soul', 'rock', 'country', 'neo')
-
-# Get the counts for specified genres
-genre_counts_2000_specified <- genre_counts_2000[specified_genres]
-
-# Get the top 5 most popular genres in 2000
-top_genres_2000 <- names(sort(genre_counts_2000_specified, decreasing = TRUE))
-
-# Calculate percentages for each specified genre in 2000
-genre_percentages_2000 <- round(100 * genre_counts_2000_specified / sum(genre_counts_2000_specified), 1)
-
-# Plot pie chart for 2000
-pie(genre_counts_2000_specified, 
-    labels = paste(top_genres_2000, genre_percentages_2000, "%"),
-    main = "Most Popular Music Genres in 2000",
-    col = rainbow(length(genre_counts_2000_specified)))
+# Count occurrences of each genre in 2000
+genre_counts_2000 <- table(music_data_2000$Genres)
 
 # Filter data for the year 2022
-data_2022 <- data %>%
-  filter(Year == 2022)
+music_data_2022 <- filter(music_data, Year == 2022)
 
-# Count the occurrences of specified genres in 2022
-genre_counts_2022 <- table(unlist(data_2022$Genres))
+# Count occurrences of each genre in 2022
+genre_counts_2022 <- table(music_data_2022$Genres)
 
-# Get the counts for specified genres
-genre_counts_2022_specified <- genre_counts_2022[specified_genres]
+# Create data frames for pie charts
+pie_data_2000 <- data.frame(genre = names(genre_counts_2000), count = as.numeric(genre_counts_2000))
+pie_data_2022 <- data.frame(genre = names(genre_counts_2022), count = as.numeric(genre_counts_2022))
 
-# Get the top 5 most popular genres in 2022
-top_genres_2022 <- names(sort(genre_counts_2022_specified, decreasing = TRUE))
+# Calculate percentage for each genre
+pie_data_2000$percentage <- pie_data_2000$count / sum(pie_data_2000$count) * 100
+pie_data_2022$percentage <- pie_data_2022$count / sum(pie_data_2022$count) * 100
 
-# Calculate percentages for each specified genre in 2022
-genre_percentages_2022 <- round(100 * genre_counts_2022_specified / sum(genre_counts_2022_specified), 1)
+# Plot pie chart for 2000
+pie_chart_2000 <- ggplot(pie_data_2000, aes(x = "", y = percentage, fill = genre)) +
+  geom_bar(stat = "identity", color = "black") +
+  geom_text(aes(label = paste0(round(percentage), "%")), position = position_stack(vjust = 0.5), size = 3.5) +
+  coord_polar("y", start = 0) +
+  labs(title = "Genre Distribution in 2000") +
+  theme_void() +
+  scale_fill_brewer(palette = "Set3") +
+  theme(legend.position = "right")
 
 # Plot pie chart for 2022
-pie(genre_counts_2022_specified, 
-    labels = paste(top_genres_2022, genre_percentages_2022, "%"),
-    main = "Most Popular Music Genres in 2022",
-    col = rainbow(length(genre_counts_2022_specified)))
+pie_chart_2022 <- ggplot(pie_data_2022, aes(x = "", y = percentage, fill = genre)) +
+  geom_bar(stat = "identity", color = "black") +
+  geom_text(aes(label = paste0(round(percentage), "%")), position = position_stack(vjust = 0.5), size = 3.5) +
+  coord_polar("y", start = 0) +
+  labs(title = "Genre Distribution in 2022") +
+  theme_void() +
+  scale_fill_brewer(palette = "Set3") +
+  theme(legend.position = "right")
+
+
+# Print pie charts
+print(pie_chart_2000)
+print(pie_chart_2022)
 ```
