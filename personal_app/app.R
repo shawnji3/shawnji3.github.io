@@ -36,7 +36,8 @@ ui <- fluidPage(
                   min = min(music_data$Year),
                   max = max(music_data$Year),
                   value = min(music_data$Year),
-                  step = 1)
+                  step = 1,
+                  sep = "")
     ),
     mainPanel(
       plotOutput("genre_plot")
@@ -72,7 +73,8 @@ server <- function(input, output) {
             panel.border = element_blank(),
             panel.background = element_blank(),
             axis.line = element_line(color = "black")) +
-      geom_text(aes(label = count), vjust = -0.3, size = 3, color = "black")
+      geom_text(aes(label = count), vjust = -0.3, size = 3, color = "black") +
+      scale_fill_viridis_d()
   })
 }
 

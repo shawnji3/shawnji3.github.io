@@ -46,8 +46,12 @@ music_data <- music_data[complete.cases(music_data$Genres), ]
 music_data_long <- reshape2::melt(music_data, id.vars = c("Year", "Genres"))
 
 # Plot
-ggplot(music_data_long, aes(x = Year, color = Genres)) +
-  geom_point(stat = "count") +
+music_data_long %>%
+  group_by(Year, Genres) %>% 
+  count() %>%
+ggplot(aes(x = Year, y = n, color = Genres)) +
+  geom_point() +
+  geom_line() +
   labs(title = "Genre Trends Over Time",
        x = "Year",
        y = "Number of Songs",
@@ -59,6 +63,13 @@ ggplot(music_data_long, aes(x = Year, color = Genres)) +
 ```
 
 ```{r,eval=TRUE,echo=TRUE}
+
+music_data_long %>%
+   group_by(Year, Genres) %>% 
+  count() %>%
+  ggplot(aes(x = Year, y = n, fill = Genres)) +
+  geom_col(position = "fill")
+
 # Function to replace genre with matching genre from the list
 # Load required libraries
 library(ggplot2)
@@ -126,7 +137,7 @@ pie_chart_2022 <- ggplot(pie_data_2022, aes(x = "", y = percentage, fill = genre
   theme(legend.position = "right")
 
 
-# Print pie charts
+# Print pie chartsS
 print(pie_chart_2000)
 print(pie_chart_2022)
 ```
