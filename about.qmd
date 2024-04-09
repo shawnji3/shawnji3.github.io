@@ -2,7 +2,9 @@
 title: "About"
 ---
 
-Welcome to the website
+Data story
+
+
 
 ```{r,eval=TRUE,echo=TRUE}
 # Load necessary libraries
