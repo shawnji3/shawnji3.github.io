@@ -137,7 +137,7 @@ pie_chart_2022 <- ggplot(pie_data_2022, aes(x = "", y = percentage, fill = genre
   theme(legend.position = "right")
 
 
-# Print pie chartsS
+# Print pie chartsSS
 print(pie_chart_2000)
 print(pie_chart_2022)
 ```
