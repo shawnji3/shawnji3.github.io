@@ -6,8 +6,12 @@ title: "Data Visualization"
 
 ![](images/clipboard-3938451565.png)
 
+Understanding the questions gives us insights into broader cultural shifts and trends. The analysis of streaming data would show the changes in the popularity of different music genres in different time and this can reflect the shifts in cultural preferences.
+Music can act as a cultural and economic force. The public preferences for popular songs can implicate some social and economic implications, this relates to consumer spending habits, brand perception and even political attitudes.
+Public preferences directly influence the success of artists, labels, streaming platforms,etc By tracking changes in popular song preferences, stakeholders in the music industry can adapt their strategies to meet evolving consumer demands.
 
-## 
+## Trend lines of each genre from 2000 - 2023
+
 
 ```{r,eval=TRUE,echo=TRUE}
 # Load necessary libraries
